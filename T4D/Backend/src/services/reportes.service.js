@@ -22,7 +22,7 @@ exports.getResumenVentas = async () => {
 exports.getVentasPorSucursal = async () => {
   const { data, error } = await supabase
     .from('mantenimiento')
-    .select('total, sucursales(nombre_sucursal)'); // ← nombre_sucursal correcto
+    .select('total, sucursales(nombre_sucursal)');
   if (error) throw new Error(error.message);
 
   const mapa = {};
@@ -38,7 +38,7 @@ exports.getVentasPorSucursal = async () => {
 exports.getVentasPorMetodoPago = async () => {
   const { data, error } = await supabase
     .from('mantenimiento')
-    .select('total, metodos_pago(nombre_metodo)'); // ← nombre_metodo correcto
+    .select('total, metodos_pago(nombre_metodo)');
   if (error) throw new Error(error.message);
 
   const mapa = {};
@@ -161,7 +161,6 @@ exports.getBalancePeriodo = async () => {
     const periodo = v.fecha_movimiento.slice(0, 7);
     if (!mapa[periodo]) mapa[periodo] = { periodo, ingresos: 0, egresos: 0, cantidad_movimientos: 0 };
     mapa[periodo].cantidad_movimientos += 1;
-    // ← Corregido: tu tabla usa 'Ingreso' y 'Egreso' con mayúscula
     if (v.tipo_movimiento === 'Ingreso') {
       mapa[periodo].ingresos += parseFloat(v.valor) || 0;
     } else if (v.tipo_movimiento === 'Egreso') {
@@ -177,7 +176,7 @@ exports.getBalancePeriodo = async () => {
 
 exports.getMasVendidos = async () => {
   const { data, error } = await supabase
-    .from('detalle_asignacion')   // ← cambiado
+    .from('detalle_asignacion')
     .select('cantidad, productos(id_producto, nombre_producto, precio_actual)');
   if (error) throw new Error(error.message);
 
