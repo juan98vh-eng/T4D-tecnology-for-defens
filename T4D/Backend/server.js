@@ -20,8 +20,7 @@ app.use((req, res, next) => {
 
   next();
 });
-
-const verificarToken = require("./src/middlewares/auth.middleware");
+const verificarToken = require("./middlewares/auth.middleware");
 
 // ── RUTA DE LOGIN ──
 app.use("/auth", require("./src/routes/auth.routes"));
