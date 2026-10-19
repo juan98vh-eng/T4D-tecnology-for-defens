@@ -1,9 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const verificarRol = require('../middlewares/verificarRol');
 const ctrl = require('../controllers/reportes.controller');
-
-router.use(verificarRol([1, 2, 3])); // Admin, Contador, Gerente — aplica a todas las rutas de abajo
 
 // ─── VENTAS ────────────────────────────────────────────────────────────────
 router.get('/ventas/resumen',        ctrl.resumenVentas);
