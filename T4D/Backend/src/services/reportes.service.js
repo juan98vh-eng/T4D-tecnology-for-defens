@@ -22,7 +22,7 @@ exports.getResumenVentas = async () => {
 exports.getVentasPorSucursal = async () => {
   const { data, error } = await supabase
     .from('mantenimiento')
-    .select('total, sucursales(nombre_sucursal)');
+    .select('total, sucursales(nombre_sucursal)'); // ← nombre_sucursal correcto
   if (error) throw new Error(error.message);
 
   const mapa = {};
@@ -38,7 +38,7 @@ exports.getVentasPorSucursal = async () => {
 exports.getVentasPorMetodoPago = async () => {
   const { data, error } = await supabase
     .from('mantenimiento')
-    .select('total, metodos_pago(nombre_metodo)');
+    .select('total, metodos_pago(nombre_metodo)'); // ← nombre_metodo correcto
   if (error) throw new Error(error.message);
 
   const mapa = {};
@@ -57,6 +57,7 @@ exports.getStockBajo = async () => {
   const { data, error } = await supabase
     .from('productos')
     .select('id_producto, nombre_producto, stock_actual')
+    .eq('activo', true)
     .lte('stock_actual', 5)
     .order('stock_actual', { ascending: true });
   if (error) throw new Error(error.message);
@@ -85,7 +86,8 @@ exports.getMovimientosInventario = async () => {
 exports.getValorizacionInventario = async () => {
   const { data, error } = await supabase
     .from('productos')
-    .select('id_producto, nombre_producto, stock_actual, precio_actual');
+    .select('id_producto, nombre_producto, stock_actual, precio_actual')
+    .eq('activo', true);
   if (error) throw new Error(error.message);
 
   return data
@@ -161,6 +163,7 @@ exports.getBalancePeriodo = async () => {
     const periodo = v.fecha_movimiento.slice(0, 7);
     if (!mapa[periodo]) mapa[periodo] = { periodo, ingresos: 0, egresos: 0, cantidad_movimientos: 0 };
     mapa[periodo].cantidad_movimientos += 1;
+    // ← Corregido: tu tabla usa 'Ingreso' y 'Egreso' con mayúscula
     if (v.tipo_movimiento === 'Ingreso') {
       mapa[periodo].ingresos += parseFloat(v.valor) || 0;
     } else if (v.tipo_movimiento === 'Egreso') {
@@ -176,7 +179,7 @@ exports.getBalancePeriodo = async () => {
 
 exports.getMasVendidos = async () => {
   const { data, error } = await supabase
-    .from('detalle_asignacion')
+    .from('detalle_asignacion')   // ← cambiado
     .select('cantidad, productos(id_producto, nombre_producto, precio_actual)');
   if (error) throw new Error(error.message);
 

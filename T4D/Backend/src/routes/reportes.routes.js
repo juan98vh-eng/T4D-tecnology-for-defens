@@ -1,55 +1,31 @@
 const express = require('express');
 const router = express.Router();
+const verificarRol = require('../middlewares/verificarRol');
 
-// Importación directa absoluta basada en la estructura estándar de src
-const reportesService = require('../services/reportes.service');
+const ctrl = require('../controllers/reportes.controller');
 
-const responder = (res, data) =>
-  res.status(200).json({ ok: true, data });
-
-const errorHandler = (res, error) =>
-  res.status(500).json({ ok: false, mensaje: error.message });
+router.use(verificarRol([1, 2, 3])); // Admin, Contador, Gerente — aplica a todas las rutas de abajo
 
 // ─── VENTAS ────────────────────────────────────────────────────────────────
-router.get('/ventas/resumen', async (req, res) => {
-  try { responder(res, await reportesService.getResumenVentas()); } catch (e) { errorHandler(res, e); }
-});
-router.get('/ventas/por-sucursal', async (req, res) => {
-  try { responder(res, await reportesService.getVentasPorSucursal()); } catch (e) { errorHandler(res, e); }
-});
-router.get('/ventas/por-metodo-pago', async (req, res) => {
-  try { responder(res, await reportesService.getVentasPorMetodoPago()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/ventas/resumen',         ctrl.resumenVentas);
+router.get('/ventas/por-sucursal',    ctrl.ventasPorSucursal);
+router.get('/ventas/por-metodo-pago', ctrl.ventasPorMetodoPago);
 
 // ─── INVENTARIO ────────────────────────────────────────────────────────────
-router.get('/inventario/stock-bajo', async (req, res) => {
-  try { responder(res, await reportesService.getStockBajo()); } catch (e) { errorHandler(res, e); }
-});
-router.get('/inventario/movimientos', async (req, res) => {
-  try { responder(res, await reportesService.getMovimientosInventario()); } catch (e) { errorHandler(res, e); }
-});
-router.get('/inventario/valorizacion', async (req, res) => {
-  try { responder(res, await reportesService.getValorizacionInventario()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/inventario/stock-bajo',   ctrl.stockBajo);
+router.get('/inventario/movimientos',  ctrl.movimientosInventario);
+router.get('/inventario/valorizacion', ctrl.valorizacionInventario);
 
 // ─── CLIENTES ──────────────────────────────────────────────────────────────
-router.get('/clientes/top', async (req, res) => {
-  try { responder(res, await reportesService.getTopClientes()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/clientes/top', ctrl.topClientes);
 
 // ─── EMPLEADOS ─────────────────────────────────────────────────────────────
-router.get('/empleados/rendimiento', async (req, res) => {
-  try { responder(res, await reportesService.getRendimientoEmpleados()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/empleados/rendimiento', ctrl.rendimientoEmpleados);
 
 // ─── FINANCIERO ────────────────────────────────────────────────────────────
-router.get('/financiero/balance', async (req, res) => {
-  try { responder(res, await reportesService.getBalancePeriodo()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/financiero/balance', ctrl.balancePeriodo);
 
 // ─── PRODUCTOS ─────────────────────────────────────────────────────────────
-router.get('/productos/mas-vendidos', async (req, res) => {
-  try { responder(res, await reportesService.getMasVendidos()); } catch (e) { errorHandler(res, e); }
-});
+router.get('/productos/mas-vendidos', ctrl.masVendidos);
 
 module.exports = router;
