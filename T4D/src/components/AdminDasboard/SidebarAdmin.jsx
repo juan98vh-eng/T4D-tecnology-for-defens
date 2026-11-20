@@ -40,6 +40,7 @@ function SidebarAdmin({ setVistaAdmin, vistaAdmin }) {
     { key: "reportes",        icon: "bi-bar-chart",        label: "Reportes"     },
     { key: "GestionUsuarios", icon: "bi-people",           label: "Usuarios"     },
     { key: "RegistroUsuarios",icon: "bi-person-plus",      label: "Registro"     },
+    { key: "empleados",       icon: "bi-person-badge",     label: "Empleados"    },
   ];
 
   return (
